@@ -10,9 +10,7 @@ public class Main {
         for (String fileName : fileNames) {
             // Displaying the files name in colour to 
             String[] tokes = fileName.split("/");
-            System.out.println("\u001B[32m#####################---->:: File Name: " + tokes[2] + " ::<----#####################\u001B[0m");
-
-           
+            System.out.println("\u001B[32mFile Name: " + tokes[2] + "\u001B[0m"); 
         }
      
     }
