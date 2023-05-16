@@ -5,12 +5,20 @@ public class Main {
     
     public static void main(String[] args) {
 
-        ArrayList<String> fileNames = readFromFile();
 
+        KnapsackProblemACO knapsack = new KnapsackProblemACO();   
+
+        ArrayList<String> fileNames = readFromFile();
         for (String fileName : fileNames) {
             // Displaying the files name in colour to 
             String[] tokes = fileName.split("/");
-            System.out.println("\u001B[32mFile Name: " + tokes[2] + "\u001B[0m"); 
+            System.out.println("\u001B[32mFile Name: " + tokes[2] + "\u001B[0m");
+
+            // Process the file Name
+            knapsack.processFile(fileName);
+
+            // Run the program
+            knapsack.run();
         }
      
     }

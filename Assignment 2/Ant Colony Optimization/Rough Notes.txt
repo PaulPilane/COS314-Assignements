@@ -33,3 +33,5 @@ After running the ACO algorithm, we can evaluate the best solution found by the 
 
 In the code I provided, I chose alpha = 1 and beta = 5. This means that the pheromone trails are five times more important than the heuristic information. This is a common choice for the knapsack problem, as the pheromone trails can help the ants to find good solutions quickly.
 The values of alpha and beta can be chosen arbitrarily, but it is important to experiment with different values to find the best combination for a particular problem. In general, a higher value of alpha will lead to more exploration, while a higher value of beta will lead to more exploitation
+
+However, in practice, it is generally better to use a random seed value to ensure that the algorithm explores a wider range of solutions. By using a different seed value each time the program is run, we can generate different random sequences and potentially discover better solutions.
