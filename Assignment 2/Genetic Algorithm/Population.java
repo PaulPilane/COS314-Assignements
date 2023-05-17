@@ -18,17 +18,28 @@ public class Population {
         return individuals;
     }
 
-
     // Tournament Selection
     public Population selectParents() {
         Population parents = new Population(individuals.size(), individuals.get(0).size());
         Random random = new Random();
         for (int i = 0; i < individuals.size(); i++) {
-            Individual parent1 = individuals.get(random.nextInt(individuals.size()));
-            Individual parent2 = individuals.get(random.nextInt(individuals.size()));
-            parents.getIndividuals().set(i, parent1.getFitness() > parent2.getFitness() ? parent1 : parent2);
+            parents.getIndividuals().set(i, tournamentSelection(random));
         }
         return parents;
+    }
+
+    private Individual tournamentSelection(Random random) {
+        Individual[] candidates = new Individual[4];
+        for (int i = 0; i < 4; i++) {
+            candidates[i] = individuals.get(random.nextInt(individuals.size()));
+        }
+        Individual winner = candidates[0];
+        for (int i = 1; i < 4; i++) {
+            if (candidates[i].getFitness() > winner.getFitness()) {
+                winner = candidates[i];
+            }
+        }
+        return winner;
     }
 
     public Population crossover() {

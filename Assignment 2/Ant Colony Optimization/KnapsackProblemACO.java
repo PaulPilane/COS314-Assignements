@@ -54,7 +54,7 @@ private List<Item> items;
     public void run() {
         // Start iterations
 
-        int bestValue = Integer.MIN_VALUE;
+        double bestValue = Double.MIN_VALUE;
         int[] bestSolution = null;
         long start = System.nanoTime();
         for(int iteration = 0; iteration < MAX_ITERATIONS; ++iteration) {

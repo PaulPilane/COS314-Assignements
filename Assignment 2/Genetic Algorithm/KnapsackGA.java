@@ -8,7 +8,7 @@ public class KnapsackGA {
 
     // Constants
     private static final int POPULATION_SIZE = 100;
-    private static final int MAX_GENERATIONS = 15;
+    private static final int MAX_GENERATIONS = 12;
     private static final double MUTATION_RATE = 0.05;
 
     // Instance variables
@@ -91,8 +91,6 @@ public class KnapsackGA {
         //The debug variable is true when the added weights want to be displayed
         if(!debug)
             return;
-
-        System.out.println("\n////////////////// DEBUGGING /////////////////////////");
         
         // Print the weight that is added to the knapsack
         printSelectedItems(population.getBestIndividual().getGenes());
@@ -106,25 +104,24 @@ public class KnapsackGA {
         // Calculate the total value and weight of the items in the knapsack
         double totalValue = 0;
         double totalWeight = 0;
-        for (int i = 0; i < individual.size(); i++) {
+        for (int i = 0; i < individual.size(); ++i) {
             if (individual.getGene(i) == 1) {
                 totalValue += items.get(i).getValue();
                 totalWeight += items.get(i).getWeight();
             }
         }
         
-        // Penalize solutions that exceed the maximum weight capacity
-        if (totalWeight > knapsackCapacity) {
-            return 0;
-        }
-        // Return the total value of the knapsack as the fitness score
-        return totalValue;
+        // Calculate the penalty factor using a sigmoid function
+        double penaltyFactor = 1.0 / (1.0 + Math.exp(-1 * (knapsackCapacity - totalWeight)));
+        
+        // Return the total value of the knapsack multiplied by the penalty factor as the fitness score
+        return totalValue * penaltyFactor;
     }
     
  // Debugging purposes
     public void printSelectedItems(List<Integer> genes) {
-        int totalWeight = 0;
-        System.out.print("Selected items: ");
+        double totalWeight = 0;
+        System.out.println("Selected items: ");
         for (int i = 0; i < genes.size(); i++) {
             if (genes.get(i) == 1) {
                 Item item = items.get(i);
