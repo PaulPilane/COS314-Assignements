@@ -10,6 +10,7 @@ public class KnapsackGA {
     private static final int POPULATION_SIZE = 100;
     private static final int MAX_GENERATIONS = 12;
     private static final double MUTATION_RATE = 0.05;
+    private final double CROSSSOVER_RATE = 0.6;
 
     // Instance variables
     private List<Item> items;
@@ -59,7 +60,7 @@ public class KnapsackGA {
             Population parents = population.selectParents();
 
             // Create offspring by crossover and mutation
-            Population offspring = parents.crossover();
+            Population offspring = parents.crossover(CROSSSOVER_RATE);
             offspring.mutate(MUTATION_RATE);
             
             // Evaluate fitness of offspring
@@ -74,7 +75,7 @@ public class KnapsackGA {
             Individual bestIndividual = population.getBestIndividual();
             System.out.printf("Generation %d: Best fitness = %.2f\n", i+1, bestIndividual.getFitness());
         }
-
+        long end = System.nanoTime();
         // Print final solution
         Individual bestIndividual = population.getBestIndividual();
         System.out.printf("Final solution: Fitness = %.2f\n", bestIndividual.getFitness());
@@ -82,7 +83,7 @@ public class KnapsackGA {
        System.out.println("Best Solution: " + bestIndividual.getGenes());
 
         // end time
-        long end = System.nanoTime();
+        
 
         // execution time
         long execution = end - start;

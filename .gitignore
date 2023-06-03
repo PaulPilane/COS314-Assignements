@@ -1,0 +1,6 @@
+# ignore ZIP files
+*.zip
+
+#ignore files which I have not authored
+
+Prac1

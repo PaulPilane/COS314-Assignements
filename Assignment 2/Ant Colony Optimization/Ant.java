@@ -55,4 +55,9 @@ public class Ant {
         }
         return value;
     }
+
+    public void setSolution(int[] solution) {
+        this.solution = solution;
+    }
+
 }

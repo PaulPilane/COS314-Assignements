@@ -42,13 +42,17 @@ public class Population {
         return winner;
     }
 
-    public Population crossover() {
+    public Population crossover(double crossoverRate) {
         Population offspring = new Population(individuals.size(), individuals.get(0).size());
         Random random = new Random();
         for (int i = 0; i < individuals.size(); i++) {
             Individual parent1 = individuals.get(i);
             Individual parent2 = individuals.get(random.nextInt(individuals.size()));
-            offspring.getIndividuals().set(i, parent1.crossover(parent2));
+            if (random.nextDouble() < crossoverRate) {
+                offspring.getIndividuals().set(i, parent1.crossover(parent2));
+            } else {
+                offspring.getIndividuals().set(i, parent1);
+            }
         }
         return offspring;
     }
@@ -74,4 +78,24 @@ public class Population {
     public Individual getBestIndividual() {
         return Collections.max(individuals);
     }
+
+   
+
+    public int getSize() {
+        return individuals.size();
+    }
+
+    public void addIndividual(Individual individual) {
+        individuals.add(individual);
+    }
+
+    public void removeIndividual(Individual individual) {
+        individuals.remove(individual);
+    }
+    
+    public void shuffle() {
+        Collections.shuffle(individuals);
+    } 
+
+    
 }

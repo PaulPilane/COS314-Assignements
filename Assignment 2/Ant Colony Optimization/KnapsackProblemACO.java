@@ -5,12 +5,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 public class KnapsackProblemACO {
+private final int MAX_LOCAL_SEARCH_ITERATIONS = 50;
 private int size;
 private KnapsackProblem problem;
 private Ant[] ants;
 private Pheromone pheromone;
 private int maxWeight;
-private final int NUM_ANTS = 100;
+private final int NUM_ANTS = 50;
 private final int MAX_ITERATIONS = 500;
 private final double INITIAL_PHEROMONE = 1.0;
 private final double EVAPORATION_RATE = 0.5;
@@ -58,36 +59,67 @@ private List<Item> items;
         int[] bestSolution = null;
         long start = System.nanoTime();
         for(int iteration = 0; iteration < MAX_ITERATIONS; ++iteration) {
-            // Assign ants to solutions
-            for (int ant = 0; ant < NUM_ANTS; ++ant) {
-                ants[ant] = new Ant(problem, pheromone, random.nextLong());
-                ants[ant].constructSolution();
-            }
+    // Assign ants to solutions
+    for (int ant = 0; ant < NUM_ANTS; ++ant) {
+        ants[ant] = new Ant(problem, pheromone, random.nextLong());
+        ants[ant].constructSolution();
+    }
 
-            // Update best solution if a better one is found
-            for (int ant = 0; ant < NUM_ANTS; ++ant) {
-                int currentValue = ants[ant].getSolutionValue();
-                if (currentValue > bestValue) {
-                    bestValue = currentValue;
-                    bestSolution = ants[ant].getSolution().clone();
-                }
-            }
-
-            // Update pheromones
-            pheromone.evaporate();
-            for (int i = 0; i < problem.getNumItems(); ++i) {
-                double sumDeltaPheromones = 0;
-                for (int ant = 0; ant < NUM_ANTS; ++ant) {
-                    if (ants[ant].getSolution()[i] == 1) {
-                        sumDeltaPheromones += 1.0 / ants[ant].getSolutionValue();
-                    }
-                }
-
-                pheromone.deposit(i, 0, sumDeltaPheromones);
-                pheromone.deposit(i, 1, sumDeltaPheromones);
-            }
-
+    // Update best solution if a better one is found
+    for (int ant = 0; ant < NUM_ANTS; ++ant) {
+        int currentValue = ants[ant].getSolutionValue();
+        if (currentValue > bestValue) {
+            bestValue = currentValue;
+            bestSolution = ants[ant].getSolution().clone();
         }
+    }
+
+    // Apply local search to improve the solution
+    for (int ant = 0; ant < NUM_ANTS; ++ant) {
+        // Start with the solution constructed by the ant
+        int[] solution = ants[ant].getSolution().clone();
+        int solutionValue = ants[ant].getSolutionValue();
+
+        // Apply hill-climbing local search
+        int numIterations = 0;
+        while (numIterations < MAX_LOCAL_SEARCH_ITERATIONS) {
+          
+            for (int i = 0; i < problem.getNumItems(); ++i) {
+                // Flip the value of the item in the solution
+                solution[i] = 1 - solution[i];
+                int newValue = problem.evaluate(solution);
+                if (newValue > solutionValue && problem.getTotalWeight(solution) <= problem.getCapacity()) {
+                    // If the new solution is better, accept it
+                    solutionValue = newValue;
+                } else {
+                    // Otherwise, flip the value back
+                    solution[i] = 1 - solution[i];
+                }
+            }
+            
+            numIterations++;
+        }
+
+        // Update the ant's solution with the improved solution
+        ants[ant].setSolution(solution);
+    
+    }
+
+        // Update the pheromone trails based on the quality of the solutions found by the ants and the local search algorithm
+        pheromone.evaporate();
+            for (int i = 0; i < problem.getNumItems(); ++i) {
+            double sumDeltaPheromones = 0;
+            for (int ant = 0; ant < NUM_ANTS; ++ant) {
+                if (ants[ant].getSolution()[i] == 1) {
+                    sumDeltaPheromones += 1.0 / ants[ant].getSolutionValue();
+                }
+            }
+
+            pheromone.deposit(i, 0, sumDeltaPheromones);
+            pheromone.deposit(i, 1, sumDeltaPheromones);
+        }
+        }
+    
 
         long end = System.nanoTime();
 

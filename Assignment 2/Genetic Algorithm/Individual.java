@@ -62,4 +62,5 @@ public class Individual implements Comparable<Individual> {
     public int compareTo(Individual other) {
         return Double.compare(fitness, other.fitness);
     }
+    
 }
