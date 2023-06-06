@@ -11,7 +11,7 @@ public class Main {
 
     public static void run() {
 
-        File folders = new File("../instances");
+    File folders = new File("../instances");
 
     File[] files = folders.listFiles();
 
@@ -52,7 +52,7 @@ public class Main {
             if(pathName.equals("Schwerin")) {
                 File schwerinFilePath = new File(file.getPath() + "/Schwerin_1");
                 File []schwerinFiles = schwerinFilePath.listFiles();
-                processFiles(schwerinFiles);
+                // processFiles(schwerinFiles);
                 
                 schwerinFilePath = new File(file.getPath() + "/Schwerin_2");
                 schwerinFiles = schwerinFilePath.listFiles();
@@ -75,9 +75,12 @@ public class Main {
         ILS local;
         TabuSearch tabu;
         List<Double> items = new ArrayList<>();
-
+        double duration = 0;
+        
         System.out.println("\u001B[32mITERATIVE LOCAL SEARCH\u001B[0m");
         for (File file : files) {
+            System.out.println("File Name: " + file.getName());
+            double start = System.currentTimeMillis();
             try (Scanner scanner = new Scanner(file)) {
                 // System.out.println("File Name: " + file.getName());
                 scanner.nextInt(); // This is for the size;
@@ -90,8 +93,11 @@ public class Main {
                 }
 
                 // Iterative Local Search
-                // local = new ILS(items, capacity);
-                // local.packBins();
+                
+                local = new ILS(items, capacity);
+                local.packBins();
+                
+
 
                 scanner.close();
             } catch (FileNotFoundException e) {
@@ -99,17 +105,26 @@ public class Main {
                 e.printStackTrace();
             }
 
+            double end = System.currentTimeMillis();
+            duration += ((end - start)/1000);
             items.clear();
-            // break;
             
         }
+
+        duration /= files.length;
+
+        System.out.println("Average Time: " + duration + "s");
 
             
             // Tabu search
         System.out.println("\n\u001B[36mTABU SEARCH\u001B[0m");
+
+        duration = 0;
         for (File file : files) {
+            double start = (double) System.currentTimeMillis();
             try (Scanner scanner = new Scanner(file)) {
                 System.out.println("File Name: " + file.getName());
+                
                 scanner.nextInt(); // This is for the size;
                 double capacity = scanner.nextInt();
 
@@ -128,9 +143,16 @@ public class Main {
                 e.printStackTrace();
             }
 
+            double end = (double) System.currentTimeMillis();
+            duration += ((end - start)/1000);
+
             items.clear();
             // break;
             
         }
+
+        duration /= files.length;
+
+        System.out.println("Average Time: " + duration + "s");
     }
 }

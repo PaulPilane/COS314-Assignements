@@ -131,12 +131,11 @@ public class ILS {
 
     public void packBins() {
         List<Bin> currentSolution = generateInitialSolution();
-        List<Bin> bestSolution = localSearch(currentSolution);
-        double bestSolutionFitness = calculateFitness(bestSolution);
+        List<Bin> bestSolution = localSearch(currentSolution);;
 
         // Output best solution
-        System.out.println("Number of bins: " + bestSolution.size());
-        System.out.println("Fitness: " + bestSolutionFitness);
+        System.out.println("Number of bins: " + bestSolution.size() + "\n");
+
     }
 
 }

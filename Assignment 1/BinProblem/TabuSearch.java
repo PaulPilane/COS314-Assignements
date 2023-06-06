@@ -39,7 +39,6 @@ public class TabuSearch {
         }
 
         // Perform Tabu search refinement
-        int iterations = 0;
         int tabuCount = 0;
         List<Double> tabuList = new ArrayList<>();
         double bestScore = calculateScore();
@@ -78,8 +77,6 @@ public class TabuSearch {
             if (tabuList.size() > TABUSIZE) {
                 tabuList.remove(0);
             }
-
-            iterations++;
         }
 
         System.out.println("Number of bins: " + bestSolution.size() + "\n");
